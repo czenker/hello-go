@@ -47,7 +47,7 @@ jobs:
           curl -s -L -o pack.tgz ${{ steps.pack-download-url.outputs.result }}
           tar -xvf pack.tgz
       - name: Build
-        run: ./pack build hello-go --builder gcr.io/buildpacks/builder:v1 --tag "ghcr.io/${{ github.repository }}:${{ github.sha }}" --publish
+        run: ./pack build "ghcr.io/${{ github.repository }}:${{ github.sha }}" --builder gcr.io/buildpacks/builder:v1 --publish
       # - uses: azure/docker-login@v1
       #   if: (github.event_name == 'repository_dispatch') || (github.event_name == 'push' && github.ref == 'refs/heads/main')
       #   with:
