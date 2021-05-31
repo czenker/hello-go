@@ -17,7 +17,16 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug
+        run: |
+          docker version
       - uses: actions/checkout@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHRC_TOKEN }}
       - name: Determine download URL for latest pack
         id: pack-download-url
         uses: actions/github-script@0.4.0
@@ -37,10 +46,8 @@ jobs:
         run: |
           curl -s -L -o pack.tgz ${{ steps.pack-download-url.outputs.result }}
           tar -xvf pack.tgz
-      - name: Install pack
-        run: docker version
       - name: Build
-        run: ./pack build hello-go --builder gcr.io/buildpacks/builder:v1
+        run: ./pack build hello-go --builder gcr.io/buildpacks/builder:v1 --tag "ghcr.io/${{ github.repository }}:${{ github.sha }}" --publish
       # - uses: azure/docker-login@v1
       #   if: (github.event_name == 'repository_dispatch') || (github.event_name == 'push' && github.ref == 'refs/heads/main')
       #   with:
