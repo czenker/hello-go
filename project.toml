@@ -1,0 +1,4 @@
+[project]
+id = "hello-go"
+name = "Hello Go by @czenker"
+version = "0.0.1"
